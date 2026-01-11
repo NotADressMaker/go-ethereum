@@ -406,8 +406,14 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, triedb *triedb.Database, g
 	}
 	// Don't overwrite if the old is identical to the new. It's useful
 	// for the scenarios that database is opened in the read-only mode.
-	storedData, _ := json.Marshal(storedCfg)
-	if newData, _ := json.Marshal(newCfg); !bytes.Equal(storedData, newData) {
+	storedData, err := json.Marshal(storedCfg)
+	if err != nil {
+		log.Error("Failed to marshal stored chain config", "err", err)
+		rawdb.WriteChainConfig(db, ghash, newCfg)
+	} else if newData, err := json.Marshal(newCfg); err != nil {
+		log.Error("Failed to marshal new chain config", "err", err)
+		rawdb.WriteChainConfig(db, ghash, newCfg)
+	} else if !bytes.Equal(storedData, newData) {
 		rawdb.WriteChainConfig(db, ghash, newCfg)
 	}
 	return newCfg, ghash, nil, nil

@@ -522,7 +522,7 @@ func TestDiskGeneratorPersistence(t *testing.T) {
 // This test case is a tiny specialized case of TestDiskPartialMerge, which tests
 // some very specific cornercases that random tests won't ever trigger.
 func TestDiskMidAccountPartialMerge(t *testing.T) {
-	// TODO(@karalabe) ?
+	t.Skip("TODO(@karalabe): Implement specialized test for mid-account partial merge cornercases")
 }
 
 // TestDiskSeek tests that seek-operations work on the disk layer
